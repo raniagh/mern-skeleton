@@ -1,6 +1,6 @@
 const create = async (user) => {
   try {
-    const response = fetch("/api/users", {
+    const response = await fetch("/api/users", {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
@@ -16,19 +16,19 @@ const create = async (user) => {
 
 const list = async (signal) => {
   try {
-    const response = fetch("/api/users", {
+    let response = await fetch("/api/users/", {
       method: "GET",
       signal: signal,
     });
     return await response.json();
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
 
 const read = async (userId, token, signal) => {
   try {
-    const response = fetch(`/api/users/${userId}`, {
+    const response = await fetch(`/api/users/${userId}`, {
       method: "GET",
       signal: signal,
       headers: {
@@ -43,14 +43,14 @@ const read = async (userId, token, signal) => {
   }
 };
 
-const update = async (params, credentials, user) => {
+const update = async (userId, token, user) => {
   try {
-    let response = await fetch("/api/users/" + params.userId, {
+    let response = await fetch("/api/users/" + userId, {
       method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + credentials.t,
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(user),
     });
@@ -60,14 +60,14 @@ const update = async (params, credentials, user) => {
   }
 };
 
-const remove = async (params, credentials) => {
+const remove = async (userId, token) => {
   try {
-    let response = await fetch("/api/users/" + params.userId, {
+    let response = await fetch("/api/users/" + userId, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + credentials.t,
+        Authorization: "Bearer " + token,
       },
     });
     return await response.json();
